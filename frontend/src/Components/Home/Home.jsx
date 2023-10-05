@@ -31,6 +31,7 @@ const Home = () => {
     if (error) {
       alert.error(error);
       dispatch({ type: "clearErrors" });
+      //clear errors wo state ko null kerega
     }
 
     if (likeError) {

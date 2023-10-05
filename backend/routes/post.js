@@ -13,6 +13,8 @@ const { isAuthenticated } = require("../middlewares/auth");
 const router = express.Router();
 
 router.route("/post/upload").post(isAuthenticated, createPost);
+//jo authenticated hai wahi access krr skte hai
+//ye createpost wala function direct controllersw mei banaye hain
 
 router
   .route("/post/:id")

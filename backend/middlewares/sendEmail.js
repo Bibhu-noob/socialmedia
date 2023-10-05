@@ -9,6 +9,7 @@ exports.sendEmail = async (options) => {
       pass: "9e2b7d43009e26",
     },
   });
+  //mailtrap kholna aur video ka 40 ka 40-43 min dekh lena
 
   const mailOptions = {
     from: process.env.SMPT_MAIL,

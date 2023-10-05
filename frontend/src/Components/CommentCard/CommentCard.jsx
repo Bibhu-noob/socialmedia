@@ -9,6 +9,7 @@ import { getFollowingPosts, getMyPosts } from "../../Actions/User";
 
 const CommentCard = ({
   userId,
+  //ye userid jisne comment kiya uska hai
   name,
   avatar,
   comment,

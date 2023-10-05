@@ -4,11 +4,13 @@ const initialState = {};
 export const userReducer = createReducer(initialState, {
   LoginRequest: (state) => {
     state.loading = true;
+    //jbbhi login hoga tbhi loading true
   },
   LoginSuccess: (state, action) => {
     state.loading = false;
     state.user = action.payload;
     state.isAuthenticated = true;
+    //ek baar login hogya uske baad false aur user mei sara data ajayega jo hum payload se bhejenge
   },
   LoginFailure: (state, action) => {
     state.loading = false;

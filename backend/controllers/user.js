@@ -13,12 +13,13 @@ exports.register = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "User already exists" });
-    }
+    } //ye if ka then wala block hai
 
     const myCloud = await cloudinary.v2.uploader.upload(avatar, {
       folder: "avatars",
     });
 
+    //ye if ka else wala block hai jahan user create hora hai
     user = await User.create({
       name,
       email,
@@ -62,6 +63,8 @@ exports.login = async (req, res) => {
     }
 
     const isMatch = await user.matchPassword(password);
+    //ye wala password humne models mei user.js ko bheja hai
+    //ye true ya false wo compare function return krr dega
 
     if (!isMatch) {
       return res.status(400).json({
@@ -81,6 +84,7 @@ exports.login = async (req, res) => {
       success: true,
       user,
       token,
+      //token milgya aur cookie mei humne save kr liya hai
     });
   } catch (error) {
     res.status(500).json({
@@ -110,7 +114,9 @@ exports.logout = async (req, res) => {
 exports.followUser = async (req, res) => {
   try {
     const userToFollow = await User.findById(req.params.id);
+    //wo user ka id mil gya jisko follow krna hai
     const loggedInUser = await User.findById(req.user._id);
+    //khudka id v mil gya
 
     if (!userToFollow) {
       return res.status(404).json({
@@ -119,11 +125,14 @@ exports.followUser = async (req, res) => {
       });
     }
 
+    //agr pehle se follow krra hai toh wo v dekhna
     if (loggedInUser.following.includes(userToFollow._id)) {
       const indexfollowing = loggedInUser.following.indexOf(userToFollow._id);
       const indexfollowers = userToFollow.followers.indexOf(loggedInUser._id);
+      //agr follow kiya hua  hai phir se marega toh unfollow krewga toh wo splice methid wo id delete krr dega
 
       loggedInUser.following.splice(indexfollowing, 1);
+
       userToFollow.followers.splice(indexfollowers, 1);
 
       await loggedInUser.save();
@@ -135,7 +144,9 @@ exports.followUser = async (req, res) => {
       });
     } else {
       loggedInUser.following.push(userToFollow._id);
+      //tumhari id mei following add hogya
       userToFollow.followers.push(loggedInUser._id);
+      //uski id mei followers jo ki tum add hogaye
 
       await loggedInUser.save();
       await userToFollow.save();
@@ -167,6 +178,7 @@ exports.updatePassword = async (req, res) => {
     }
 
     const isMatch = await user.matchPassword(oldPassword);
+    //oldPassword mei bhej diya match krne ke lye
 
     if (!isMatch) {
       return res.status(400).json({
@@ -248,6 +260,7 @@ exports.deleteMyProfile = async (req, res) => {
     });
 
     // Delete all posts of the user
+    //poori array mei id ko pass krte jaunga aur post ko delete krte jaunga
     for (let i = 0; i < posts.length; i++) {
       const post = await Post.findById(posts[i]);
       await cloudinary.v2.uploader.destroy(post.image.public_id);
@@ -259,6 +272,7 @@ exports.deleteMyProfile = async (req, res) => {
       const follower = await User.findById(followers[i]);
 
       const index = follower.following.indexOf(userId);
+      //uss follower ki following mei se hum remove krenge apni id
       follower.following.splice(index, 1);
       await follower.save();
     }
@@ -266,6 +280,7 @@ exports.deleteMyProfile = async (req, res) => {
     // Removing User from Following's Followers
     for (let i = 0; i < following.length; i++) {
       const follows = await User.findById(following[i]);
+      //user dhunda following mei se milgy phir maine delete kr diya
 
       const index = follows.followers.indexOf(userId);
       follows.followers.splice(index, 1);
@@ -310,6 +325,7 @@ exports.deleteMyProfile = async (req, res) => {
   }
 };
 
+//apni profilew k info de dgea
 exports.myProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate(
@@ -383,6 +399,7 @@ exports.forgotPassword = async (req, res) => {
     }
 
     const resetPasswordToken = user.getResetPasswordToken();
+    //getResetpasswordToken models.js mei bana hai
 
     await user.save();
 
@@ -398,6 +415,8 @@ exports.forgotPassword = async (req, res) => {
         subject: "Reset Password",
         message,
       });
+      //ye email wo user  register krega toh usko pahanch jayega
+      //middleware mei sendEmail.js banaye hai
 
       res.status(200).json({
         success: true,

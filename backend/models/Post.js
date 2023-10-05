@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+//yahan humlog post ka schema banayenge
 
 const postSchema = new mongoose.Schema({
   caption: String,
@@ -11,6 +12,7 @@ const postSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    //wo mtlb user wala file mei jo id hga wo id -ye h reference ka mtlb
   },
 
   createdAt: {
@@ -21,6 +23,7 @@ const postSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      //reference user mtlb saare users ka data dega wo
     },
   ],
 

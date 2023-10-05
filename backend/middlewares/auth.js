@@ -12,8 +12,11 @@ exports.isAuthenticated = async (req, res, next) => {
     }
 
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    //jwt k method hai verify decoded mei ek object hga jiski koi id hogi
+    //isse humko user ka id mil jayega
 
     req.user = await User.findById(decoded._id);
+    //isse humko user mil jayega ,req.user mei sara data save hojayega
 
     next();
   } catch (error) {

@@ -17,6 +17,7 @@ const Login = () => {
 
   const loginHandler = (e) => {
     e.preventDefault();
+    //prevent default ka kaam ye hai ki page reload nhi hoga jb wo login pe click krega
 
     dispatch(loginUser(email, password));
   };
@@ -35,6 +36,7 @@ const Login = () => {
   return (
     <div className="login">
       <form className="loginForm" onSubmit={loginHandler}>
+        {/* login handler upar likha hai */}
         <Typography variant="h3" style={{ padding: "2vmax" }}>
           Social Aap
         </Typography>

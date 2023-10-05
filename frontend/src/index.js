@@ -10,6 +10,7 @@ const options = {
   position: positions.BOTTOM_CENTER,
   timeout: 5000,
   transition: transitions.SCALE,
+  //ye react aleert use krne ka tarika hai
 };
 ReactDOM.render(
   <React.StrictMode>

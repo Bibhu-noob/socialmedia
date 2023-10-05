@@ -45,6 +45,7 @@ exports.deletePost = async (req, res) => {
       });
     }
 
+    //jo owner ki id hai auur jo login kiya hua user ka id hai usse match krke dekha
     if (post.owner.toString() !== req.user._id.toString()) {
       return res.status(401).json({
         success: false,
@@ -59,7 +60,9 @@ exports.deletePost = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     const index = user.posts.indexOf(req.params.id);
+    //post ka index milega
     user.posts.splice(index, 1);
+    //wo post wala array se v delete kr diya
 
     await user.save();
 
@@ -78,6 +81,7 @@ exports.deletePost = async (req, res) => {
 exports.likeAndUnlikePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
+    //ye post de dega
 
     if (!post) {
       return res.status(404).json({
@@ -87,9 +91,11 @@ exports.likeAndUnlikePost = async (req, res) => {
     }
 
     if (post.likes.includes(req.user._id)) {
+      //agar user pehle se like kiiya hua hai
       const index = post.likes.indexOf(req.user._id);
 
       post.likes.splice(index, 1);
+      //ye wo index delee kr dega
 
       await post.save();
 
@@ -97,7 +103,10 @@ exports.likeAndUnlikePost = async (req, res) => {
         success: true,
         message: "Post Unliked",
       });
-    } else {
+    }
+
+    //ye sirf like krna hai toh
+    else {
       post.likes.push(req.user._id);
 
       await post.save();
@@ -118,10 +127,13 @@ exports.likeAndUnlikePost = async (req, res) => {
 exports.getPostOfFollowing = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
+    //user mil jayega
 
     const posts = await Post.find({
       owner: {
         $in: user.following,
+        //jahan jahan id match krte jayega usko wo bhejta jayega
+        //ye thk se samajh nhi aaya
       },
     }).populate("owner likes comments.user");
 
@@ -148,6 +160,7 @@ exports.updateCaption = async (req, res) => {
       });
     }
 
+    //jo post ka owner hai wahi edit kr skta hai
     if (post.owner.toString() !== req.user._id.toString()) {
       return res.status(401).json({
         success: false,
@@ -192,6 +205,7 @@ exports.commentOnPost = async (req, res) => {
 
     if (commentIndex !== -1) {
       post.comments[commentIndex].comment = req.body.comment;
+      //wo index ko use krke hum comment ko access kr lenge
 
       await post.save();
 

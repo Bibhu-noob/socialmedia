@@ -1,5 +1,6 @@
 import axios from "axios";
 
+//ye wo login.jsx se data aya hai
 export const loginUser = (email, password) => async (dispatch) => {
   try {
     dispatch({
@@ -8,6 +9,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 
     const { data } = await axios.post(
       "/api/v1/login",
+      //data bheja hai email password
       { email, password },
       {
         headers: {
@@ -19,6 +21,7 @@ export const loginUser = (email, password) => async (dispatch) => {
     dispatch({
       type: "LoginSuccess",
       payload: data.user,
+      //wo playload mei user wala data bhej diya hai
     });
   } catch (error) {
     dispatch({
